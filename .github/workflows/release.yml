@@ -23,8 +23,8 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: production
-      url: "https://pypi.org/p/visanarci"
+      name: testpypi
+      url: "https://test.pypi.org/p/visanarci"
 
     permissions:
       id-token: write
@@ -58,6 +58,7 @@ jobs:
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          repository-url: https://test.pypi.org/legacy/
           verbose: true
 
       - id: prerelease-check
