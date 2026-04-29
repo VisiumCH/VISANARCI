@@ -15,7 +15,6 @@ authors = [
 ]
 maintainers = [{ name = "Alejandro Medrano", email = "alejnadro.medrano@visium.com" }]
 dependencies = ["biopython"]
-dynamic = ["version"]
 
 [project.urls]
 "Homepage" = "https://github.com/VisiumCH/VISANARCI"
