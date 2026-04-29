@@ -21,8 +21,15 @@ dynamic = ["version"]
 "Original" = "http://opig.stats.ox.ac.uk/webapps/ANARCI"
 
 [dependency-groups]
-dev = ["debugpy>=1.8.20,<2.0.0", { include-group = "lint" }]
-lint = ["ruff>=0.15.0,<0.16.0"]
+dev = [
+    "debugpy>=1.8.20,<2.0.0",
+    "pytest>=8.0.0,<9.0.0",
+    { include-group = "lint" },
+]
+
+lint = [
+    "ruff>=0.15.0,<0.16.0",
+]
 
 [tool.setuptools]
 script-files = ["bin/ANARCI"]

@@ -114,6 +114,13 @@ jobs:
           python -c "import anarci; print(anarci.__file__)"
           ANARCI -h
 
+      - name: Run tests
+        run: |
+          python -m venv .venv-tests
+          source .venv-tests/bin/activate
+          pip install dist/*.whl pytest
+          pytest tests
+
       - uses: actions/upload-artifact@v6
         with:
           name: dist
