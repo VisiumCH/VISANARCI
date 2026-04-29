@@ -1,13 +1,21 @@
 [build-system]
-requires = ["setuptools>=60", "setuptools-scm>=8"]
+requires = ["setuptools>=60"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "VISANARCI"
+name = "visanarci"
 version = "0.1.0"
 requires-python = ">=3.8"
 description = "Visium-maintained PyPI distribution of ANARCI (Antibody Numbering and Antigen Receptor ClassIfication)"
 readme = "README.md"
+license = { text = "BSD-3-Clause" }
+keywords = ["antibody", "bioinformatics", "anarci", "immunology"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
 authors = [
     { name = "James Dunbar", email = "dunbar@stats.ox.ac.uk" },
     { name = "Charlotte Deane", email = "deane@stats.ox.ac.uk" },
@@ -42,9 +50,6 @@ where = ["lib/python"]
     "germlines.py",
     "dat/HMMs/ALL.hmm*",
 ]
-
-[tool.setuptools_scm]
-version_scheme = "calver-by-date"
 
 [tool.uv]
 constraint-dependencies = [
