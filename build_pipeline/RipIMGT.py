@@ -135,6 +135,10 @@ def get_html(species, gene_type, force = True):
     # If html file exists already
     if os.path.isfile(filename):
         return filename
+    url = urls[gene_type] % species
+    print(f"Downloading {gene_type} / {species}")
+    print(url)
+
     if urllib.request.urlretrieve( urls[gene_type]%species,  filename ):
         return filename
     else:

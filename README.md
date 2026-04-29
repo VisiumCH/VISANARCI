@@ -1,3 +1,36 @@
+# VISANARCI
+
+VISANARCI is a Visium-maintained, pip-installable fork of the original [ANARCI](https://github.com/oxpig/ANARCI) v1
+implementation.
+
+The goal of this fork is to provide a reproducible Python package that can be  installed with pip in environments where
+conda is not available.
+
+This package bundles the pre-built ANARCI HMM database and germline metadata  required at runtime, so installation does
+not depend on conda or live access to IMGT.
+
+- **Original Repository:** [oxpig/ANARCI](https://github.com/oxpig/ANARCI)
+  (Official Source)
+- **Newer Version:** [oxpig/ANARCII](https://github.com/oxpig/ANARCII)
+  (Language model-based)
+
+## Disclaimer
+
+This fork is maintained independently of the Oxford Protein Informatics Group (OPIG).
+
+The original ANARCI software was developed by OPIG. This fork is not officially  supported, authorized, or sponsored by
+the original authors. References to OPIG  or the original ANARCI project are for attribution purposes only.
+
+- **Original Repository:** [oxpig/ANARCI](https://github.com/oxpig/ANARCI)
+- **Newer Version:** [oxpig/ANARCII](https://github.com/oxpig/ANARCII)
+
+## Installation
+
+```shell
+pip install visanarci
+```
+
+---
 ```
 ANARCI                                                 \\    //
 Antibody Numbering and Antigen Receptor ClassIfication  \\  //
@@ -25,17 +58,6 @@ ANARCI -i myfile.fasta
 ```
 
 * Please note that while ANARCI uses alignment to species V and J germlines to determine the species of the antibody for purposes of numbering, we do not recommend using ANARCI as your primary species annotation tool
-
-# Installation
-
-The easiest way to install ANARCI and its dependencies is using conda
-
-```python
-conda install -c conda-forge biopython -y
-conda install -c bioconda hmmer=3.3.2 -y
-cd ANARCI
-python setup.py install
-```
 
 # Further info
 
@@ -199,4 +221,3 @@ Other species may still be numbered correctly and the chain type recognised but 
             although these are unlikely to occur in natural sequences. The CDRs are numbered in an 'up' and 'down' direction.
             The annotations of CDRL1 is defined according to the canonical structure. In ANARCI this is recognised by taking
             a sequence similarity to hard coded sequence motifs for different lengths.
-

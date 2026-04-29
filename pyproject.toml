@@ -1,0 +1,89 @@
+[build-system]
+requires = ["setuptools>=60"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visanarci"
+version = "0.1.0"
+requires-python = ">=3.8"
+description = "Visium-maintained PyPI distribution of ANARCI (Antibody Numbering and Antigen Receptor ClassIfication)"
+readme = "README.md"
+license = { text = "BSD-3-Clause" }
+keywords = ["antibody", "bioinformatics", "anarci", "immunology"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+authors = [
+    { name = "James Dunbar", email = "dunbar@stats.ox.ac.uk" },
+    { name = "Charlotte Deane", email = "deane@stats.ox.ac.uk" },
+    { name = "Oxford Protein Informatics Group (OPIG)", email = "opig@stats.ox.ac.uk" },
+]
+maintainers = [{ name = "Alejandro Medrano", email = "alejnadro.medrano@visium.com" }]
+dependencies = ["biopython"]
+
+[project.urls]
+"Homepage" = "https://github.com/VisiumCH/VISANARCI"
+"Original" = "http://opig.stats.ox.ac.uk/webapps/ANARCI"
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8.20,<2.0.0",
+    "pytest>=8.0.0,<9.0.0",
+    { include-group = "lint" },
+]
+
+lint = [
+    "ruff>=0.15.0,<0.16.0",
+]
+
+[tool.setuptools]
+script-files = ["bin/ANARCI"]
+
+[tool.setuptools.packages.find]
+where = ["lib/python"]
+
+[tool.setuptools.package-data]
+"anarci" = [
+    "germlines.py",
+    "dat/HMMs/ALL.hmm*",
+]
+
+[tool.uv]
+constraint-dependencies = [
+    "pygls<2.0", # vscode requires pygls<2.0
+]
+
+[tool.ruff]
+line-length = 79
+src = ["lib/python"]
+extend-include = ["*.pyi", "*.ipynb"]
+
+[tool.ruff.lint]
+extend-select = ["I", "RUF"]
+ignore = [
+    "E74",
+    "F403",
+    "F405",
+    "N803",
+    "N806",
+    "S603",
+    "S607",
+    "B008",
+    "B905",
+    "PTH123",
+    "PLW2901",
+    "NPY002",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = [
+    "F401", # Imported but unused
+    "F403", # Wildcard imports
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+no-lines-before = ["local-folder"]

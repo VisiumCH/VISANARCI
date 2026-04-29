@@ -1,0 +1,128 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      regenerate-artifacts:
+        required: false
+        type: boolean
+        default: false
+
+  workflow_dispatch:
+    inputs:
+      regenerate-artifacts:
+        description: "Regenerate ANARCI HMM/germline artifacts from IMGT"
+        required: false
+        type: boolean
+        default: false
+
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  build:
+    if: ${{ !endsWith(github.triggering_actor, '[bot]') && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: mamba-org/setup-micromamba@v2
+        if: ${{ inputs.regenerate-artifacts }}
+        with:
+          environment-file: build_pipeline/environment.yml
+          generate-run-shell: true
+          cache-environment: true
+
+      - name: Regenerate ANARCI artifacts
+        if: ${{ inputs.regenerate-artifacts }}
+        run: build_pipeline/RUN_pipeline.sh
+        shell: micromamba-shell {0}
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: ".python-version"
+
+      - uses: astral-sh/setup-uv@v7
+
+      - name: Verify bundled ANARCI artifacts exist
+        run: |
+          test -f lib/python/anarci/germlines.py
+          test -f lib/python/anarci/dat/HMMs/ALL.hmm
+          test -f lib/python/anarci/dat/HMMs/ALL.hmm.h3f
+          test -f lib/python/anarci/dat/HMMs/ALL.hmm.h3i
+          test -f lib/python/anarci/dat/HMMs/ALL.hmm.h3m
+          test -f lib/python/anarci/dat/HMMs/ALL.hmm.h3p
+
+      - name: Build package
+        run: uv build --no-sources --clear --no-create-gitignore
+
+      - name: Check package metadata
+        run: uvx twine check dist/*
+
+      - name: Verify wheel contains bundled artifacts
+        run: |
+          python - <<'PY'
+          import glob
+          import zipfile
+
+          wheels = glob.glob("dist/*.whl")
+          assert len(wheels) == 1, wheels
+
+          required = {
+              "anarci/germlines.py",
+              "anarci/dat/HMMs/ALL.hmm",
+              "anarci/dat/HMMs/ALL.hmm.h3f",
+              "anarci/dat/HMMs/ALL.hmm.h3i",
+              "anarci/dat/HMMs/ALL.hmm.h3m",
+              "anarci/dat/HMMs/ALL.hmm.h3p",
+          }
+
+          with zipfile.ZipFile(wheels[0]) as zf:
+              names = set(zf.namelist())
+
+          missing = sorted(required - names)
+          assert not missing, f"Missing files in wheel: {missing}"
+          print("Wheel contains all bundled ANARCI artifacts")
+          PY
+
+      - name: Smoke test installed wheel
+        run: |
+          python -m venv .venv-test
+          source .venv-test/bin/activate
+          pip install dist/*.whl
+          pip show visanarci
+          python -c "import anarci; print(anarci.__file__)"
+          ANARCI -h
+
+      - name: Run tests
+        run: |
+          python -m venv .venv-tests
+          source .venv-tests/bin/activate
+          pip install dist/*.whl pytest
+          pytest tests
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7

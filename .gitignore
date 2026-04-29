@@ -1,6 +1,49 @@
-build_pipeline/IMGT_sequence_files
-build_pipeline/muscle_alignments
-build_pipeline/curated_alignments
-build_pipeline/HMMs
-build_pipeline/__pycache__
+# ANARCI build pipeline generated files
+build_pipeline/IMGT_sequence_files/
+build_pipeline/muscle_alignments/
+build_pipeline/curated_alignments/
+build_pipeline/HMMs/
+
+# Python bytecode
+__pycache__/
+*.py[codz]
+*$py.class
+
+# Native extensions
+*.so
+
+# Build artifacts
 build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test/cache artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local config / secrets
+.env
+.envrc
+.pypirc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Lockfiles
+# uv.lock
